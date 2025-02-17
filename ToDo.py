@@ -1,7 +1,21 @@
 tasks = []
 
-print("~~TO-DO List~~")
+def load_tasks():
+    try:
+        with open("tasks.txt", "r") as file:
+            for line in file:
+                tasks.append(line.strip())
+    except FileNotFoundError:
+        pass
 
+def save_tasks():
+    with open("tasks.txt", "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
+
+
+print("~~TO-DO List~~")
+load_tasks()
 
 def show_menu():
     print("\nMenu:", "1 - Add task", "2 - Remove task", "3 - Edit task", "4 - View tasks", "5 - Exit", sep="\n")
@@ -10,6 +24,7 @@ def show_menu():
 def add_task():
     task = input("\nEnter a task: ")
     tasks.append(task)
+    save_tasks()
     print(f"Task '{task}' has been added to list")
 
 
@@ -22,6 +37,7 @@ def remove_task():
         index = int(input("\nEnter task number to remove: ")) - 1
         if 0 <= index < len(tasks):
             removed_task = tasks.pop(index)
+            save_tasks()
             print(f"Task {removed_task} has been removed")
         else:
             print("Invalid task number.")
@@ -35,6 +51,7 @@ def edit_task():
         index = int(input("\nEnter task number to edit: ")) - 1
         if 0 <= index < len(tasks):
             tasks[index] = input("Enter edited task: ")
+            save_tasks()
             print(f"Task number {index+1}, {tasks[index]} has been edited")
         else:
             print("Invalid task number.")
